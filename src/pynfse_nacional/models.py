@@ -373,6 +373,7 @@ class DPS(BaseModel):
     numero: int = Field(..., gt=0, description="Numero do DPS (deve ser maior que zero)")
     competencia: str = Field(..., description="Competencia no formato YYYY-MM")
     data_emissao: datetime
+    data_fato_gerador: datetime
     prestador: Prestador
     tomador: Tomador
     servico: Servico
