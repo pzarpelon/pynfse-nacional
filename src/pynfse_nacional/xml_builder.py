@@ -49,7 +49,7 @@ class XMLBuilder:
         ET.SubElement(infDPS, "verAplic").text = "pynfse-1.0"
         ET.SubElement(infDPS, "serie").text = dps.serie
         ET.SubElement(infDPS, "nDPS").text = str(dps.numero)
-        ET.SubElement(infDPS, "dCompet").text = dps.data_emissao.strftime("%Y-%m-%d")
+        ET.SubElement(infDPS, "dCompet").text = dps.data_fato_gerador.strftime("%Y-%m-%d")
         ET.SubElement(infDPS, "tpEmit").text = "1"
         ET.SubElement(infDPS, "cLocEmi").text = str(dps.prestador.endereco.codigo_municipio)
 
@@ -81,7 +81,8 @@ class XMLBuilder:
         ET.SubElement(prest, "CNPJ").text = dps.prestador.cnpj
 
         # IM padded with spaces to 15 chars as seen in real NFSe
-        im_padded = dps.prestador.inscricao_municipal.rjust(15)
+        if dps.prestador.inscricao_municipal:
+            im_padded = dps.prestador.inscricao_municipal.rjust(15)
         ET.SubElement(prest, "IM").text = im_padded
 
         if dps.prestador.telefone:
