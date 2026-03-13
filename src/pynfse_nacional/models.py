@@ -47,7 +47,31 @@ def _validate_cnpj_digits(cnpj: str) -> bool:
 
     return cnpj[-2:] == f"{d1}{d2}"
 
+class GIBSCBS(BaseModel):
+    """Grupo obrigatório de tributação IBS/CBS"""
+    CST: str          # ex: "200" (Anexo VI da NT)
+    cClassTrib: str   # ex: "200028" (Anexo VIII da NT)
 
+class Trib(BaseModel):
+    gIBSCBS: GIBSCBS
+
+class ValoresIBSCBS(BaseModel):
+    trib: Trib
+    vBC: Decimal          # Base de cálculo (geralmente = valor_servicos)
+
+class RefNFSe(BaseModel):
+    Numero: str = "0"
+    Serie: str = "0"
+    Tipo: str = "0"
+
+class IBSCBS(BaseModel):
+    """Grupo completo IBSCBS (obrigatório)"""
+    finNFSe: int = 1                    # 1 = Normal
+    indFinal: int = 1                   # 1 = Consumo final
+    cIndOp: str                         # 6 dígitos - Anexo VII (ex: 030102)
+    refNFSe: RefNFSe | None = None
+    valores: ValoresIBSCBS
+    
 class Endereco(BaseModel):
     logradouro: str = Field(..., min_length=1, max_length=255)
     numero: str = Field(..., min_length=1, max_length=60)
